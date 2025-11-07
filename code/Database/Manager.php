@@ -10,19 +10,37 @@ use Database\QueryBuilder;
 final class Manager
 {
     private ?PDO $pdo = null; // 初回利用時に作成して以降再利用
+    private $dbname;
+    private $host;
+    private $port;
+    private $user;
+    private $password;
+
+
+    public function __construct(
+        $dbname,
+        $host,
+        $port,
+        $user,
+        $password
+    ){
+        $this->dbname = $dbname;
+        $this->host = $host;
+        $this->port = $port;
+        $this->user = $user;
+        $this->password = $password;
+    }
 
 
     /** 遅延でPDO生成し、以後はキャッシュを返す */
     public function pdo(): PDO
     {
         if ($this->pdo === null) {
-            //$this->pdo = ($this->connector)();
             try {
-                include_once($_SERVER['DOCUMENT_ROOT'] . '/../library/config/database.php');
                 $this->pdo = new PDO(
-                    'mysql:dbname=' . $dbname . ';host=' . $host . ($port ? ';port=' . $port : ''),
-                    $user,
-                    $password,
+                    'mysql:dbname=' . $this->dbname . ';host=' . $this->host . ($this->port ? ';port=' . $this->port : ''),
+                    $this->user,
+                    $this->password,
                     [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
                 );
 

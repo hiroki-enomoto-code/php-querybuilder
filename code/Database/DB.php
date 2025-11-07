@@ -15,9 +15,15 @@ final class DB
     /** @var bool */
     private static $debug = false;
 
-    public static function setup(callable $connector): void
+    public static function setup(
+        $dbname,
+        $host,
+        $port,
+        $user,
+        $password
+    ): void
     {
-        self::$manager = new Manager($connector);
+        self::$manager = new Manager($dbname, $host, $port, $user, $password);
     }
 
     public static function setDebug(bool $debug): void
